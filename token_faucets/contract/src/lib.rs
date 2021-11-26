@@ -74,7 +74,7 @@ impl FaucetContract {
         self.supported_tokens_map.insert(&token_id, &faucet_amount);
     }
 
-    pub fn get_faucet(&mut self, token_id: AccountId) {
+    pub fn request_faucet(&mut self, token_id: AccountId) {
         let _signer = env::signer_account_id();
         let _valid_signer_id = ValidAccountId::try_from(_signer.clone()).unwrap();
         if !self.is_allow_faucet(_valid_signer_id) { return };
@@ -124,5 +124,4 @@ impl FaucetContract {
             );
     }
 }
-
 
