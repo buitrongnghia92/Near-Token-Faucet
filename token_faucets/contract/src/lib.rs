@@ -21,16 +21,13 @@ use near_sdk::json_types::{
 
 use near_sdk::{
     env, 
-    log, 
     near_bindgen, 
     AccountId, 
     Balance, 
-    PromiseOrValue, 
     setup_alloc, 
     Promise, 
-    PromiseResult, 
     Timestamp, 
-    Gas
+    Gas,
 };
 
 const DEFAULT_GAS_TO_PAY: Gas = 20_000_000_000_000;
@@ -44,6 +41,12 @@ pub struct FaucetContract {
     owner: ValidAccountId,
     supported_tokens_map: UnorderedMap<ValidAccountId, Balance>,
     users_record_map: UnorderedMap<ValidAccountId, Timestamp> 
+}
+
+impl Default for FaucetContract {
+    fn default() -> Self {
+        env::panic(b"Faucet should be initialized before usage")
+    }
 }
 
 #[near_bindgen]
@@ -74,15 +77,22 @@ impl FaucetContract {
         self.supported_tokens_map.insert(&token_id, &faucet_amount);
     }
 
-    pub fn request_faucet(&mut self, token_id: AccountId) {
+    
+    // #[payable]
+    pub fn request_faucet(&mut self, token_id: AccountId) -> bool {
         let _signer = env::signer_account_id();
         let _valid_signer_id = ValidAccountId::try_from(_signer.clone()).unwrap();
-        if !self.is_allow_faucet(_valid_signer_id) { return };
+
+        assert!(
+            !self.is_allow_faucet(_valid_signer_id), 
+            "You already get faucet today!"
+        );
 
         let _valid_token_id = ValidAccountId::try_from(token_id.clone()).unwrap();
 
         match self.supported_tokens_map.get(&_valid_token_id) {
             Some(value) => {
+
                Promise::new(token_id.clone()).function_call(
                     b"ft_transfer".to_vec(),
                     json!({
@@ -93,10 +103,9 @@ impl FaucetContract {
                 );
 
                self.record_faucet(_valid_token_id);
+               return true;
             },
-            None => {
-
-            }
+            None =>  {return false;}
         }
     }
 

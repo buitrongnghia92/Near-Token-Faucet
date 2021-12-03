@@ -1,0 +1,1 @@
+/Users/trietnguyen/Documents/Blockchain\ Development/NEAR_NOV/token_faucets/contract/target/wasm32-unknown-unknown/release/faucet.wasm: /Users/trietnguyen/Documents/Blockchain\ Development/NEAR_NOV/token_faucets/contract/src/lib.rs
