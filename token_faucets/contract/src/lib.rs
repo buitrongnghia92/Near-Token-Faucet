@@ -109,6 +109,18 @@ impl FaucetContract {
         }
     }
 
+    pub fn get_tokens_support(&mut self) -> Vec<(ValidAccountId, Balance)> {
+        self.supported_tokens_map
+            .iter()
+            .collect()
+    }
+
+    pub fn get_received_faucet(&mut self) -> Vec<(ValidAccountId, Timestamp)> {
+        self.users_record_map
+            .iter()
+            .collect()
+    }
+
     fn record_faucet(&mut self, faucet_account: ValidAccountId) {
         self.users_record_map.insert(&faucet_account, &env::block_timestamp());
     }
