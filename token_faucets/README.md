@@ -22,6 +22,11 @@ near call $ID new '{}' --accountId faucet_account.testnet
 near call $ID default_tokens_support '{}' --accountId faucet_account.testnet
 ```
 
+### Check records map
+```sh
+near call $ID get_received_faucet '{}' --accountId receive_faucet.testnet
+```
+
 Any user can use request_faucet with token id to request a faucet
 
 Send OCT token to the deployed contract on Wallet UI 

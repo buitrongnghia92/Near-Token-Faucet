@@ -84,7 +84,7 @@ impl FaucetContract {
         let _valid_signer_id = ValidAccountId::try_from(_signer.clone()).unwrap();
 
         assert!(
-            !self.is_allow_faucet(_valid_signer_id), 
+            !self.is_allow_faucet(_valid_signer_id.clone()), 
             "You already get faucet today!"
         );
 
@@ -102,7 +102,7 @@ impl FaucetContract {
                     1, DEFAULT_GAS_TO_PAY,
                 );
 
-               self.record_faucet(_valid_token_id);
+               self.record_faucet(_valid_signer_id);
                return true;
             },
             None =>  {return false;}
